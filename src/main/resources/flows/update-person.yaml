@@ -1,0 +1,29 @@
+flow:
+  id: 'update-person'
+  description: 'update person'
+  ttl: 10s
+  exception: 'v1.person.exception'
+
+first.task: 'v1.update.person'
+
+tasks:
+  # Task to get the profile based on the profile_id
+  - input:
+      - 'input.body -> *'
+    process: 'v1.update.person'
+    output:
+      - 'result -> output.body'
+    description: 'save person into database using body'
+    execution: end
+
+  # Exception handler task
+  - input:
+      - 'error.code -> status'
+      - 'error.message -> message'
+      - 'error.stack -> stack'
+    process: 'v1.person.exception'
+    output:
+      - 'result.status -> output.status'
+      - 'result -> output.body'
+    description: 'Demo exception handler'
+    execution: end

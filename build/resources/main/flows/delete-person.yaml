@@ -1,0 +1,29 @@
+flow:
+  id: 'delete-person'
+  description: 'delete person'
+  ttl: 10s
+  exception: 'v1.person.exception'
+
+first.task: 'v1.delete.person'
+
+tasks:
+  # Task to get the profile based on the profile_id
+  - input:
+      - 'input.path_parameter.person_id -> person_id'
+    process: 'v1.delete.person'
+    output:
+      - 'result -> output.body'
+    description: 'delete person using profile_id'
+    execution: end
+
+  # Exception handler task
+  - input:
+      - 'error.code -> status'
+      - 'error.message -> message'
+      - 'error.stack -> stack'
+    process: 'v1.person.exception'
+    output:
+      - 'result.status -> output.status'
+      - 'result -> output.body'
+    description: 'Demo exception handler'
+    execution: end

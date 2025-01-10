@@ -1,0 +1,7 @@
+flows:
+  - 'get-person.yaml'
+  - 'save-person.yaml'
+  - 'update-person.yaml'
+  - 'delete-person.yaml'
+
+location: 'classpath:/flows/'
