@@ -4,7 +4,11 @@ import com.common.Person;
 import com.example.config.MongoDBConfig;
 import com.mongodb.reactivestreams.client.MongoCollection;
 import org.bson.Document;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PersonRepository {
     private final MongoCollection<Document> collection;
@@ -48,4 +52,22 @@ public class PersonRepository {
         return Mono.from(collection.deleteOne(query))
                 .map(result -> "Person with ID " + id + " deleted successfully");
     }
+
+
+    public List<Person> findAllPersons() {
+        List<Person> persons = Flux.from(collection.find()).map(this::mapToPersons).collectList().block();
+        System.out.println( persons + " all persons in find all persons method");
+        return Flux.from(collection.find()).map(this::mapToPersons).collectList().block();
+
+    }
+
+    public Person mapToPersons(Document doc) {
+        Person person = new Person();
+        person.setId(Integer.parseInt(doc.getString("_id")));
+        person.setName(doc.getString("name"));
+        person.setAddress(doc.getString("address"));
+        System.out.println(person.toString() + " map to persons");
+        return  person;
+    }
+
 }

@@ -3,5 +3,6 @@ flows:
   - 'save-person.yaml'
   - 'update-person.yaml'
   - 'delete-person.yaml'
+  - 'get-persons.yaml'
 
 location: 'classpath:/flows/'

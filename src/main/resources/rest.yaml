@@ -23,6 +23,7 @@ rest:
     headers: header_1
     tracing: true
 
+
   - service: "http.flow.adapter"
     methods: ['POST']
     url: "/api/person"
@@ -50,6 +51,14 @@ rest:
     headers: header_1
     tracing: true
 
+  - service: "http.flow.adapter"
+    methods: ['GET']
+    url: "/api/persons"
+    flow: 'get-persons'
+    timeout: 10s
+    cors: cors_1
+    headers: header_1
+    tracing: true
 
 
 #

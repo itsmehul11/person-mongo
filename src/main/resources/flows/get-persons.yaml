@@ -1,0 +1,28 @@
+flow:
+  id: 'get-persons'
+  description: 'Get a user profile using profile ID'
+  ttl: 10s
+  exception: 'v1.person.exception'
+
+first.task: 'person.all'
+
+tasks:
+  # Task to get the profile based on the profile_id
+  - input:
+    process: 'person.all'
+    output:
+      - 'result -> output.body'
+    description: 'Retrieve users profile from database'
+    execution: end
+
+  # Exception handler task
+  - input:
+      - 'error.code -> status'
+      - 'error.message -> message'
+      - 'error.stack -> stack'
+    process: 'v1.person.exception'
+    output:
+      - 'result.status -> output.status'
+      - 'result -> output.body'
+    description: 'Demo exception handler'
+    execution: end
